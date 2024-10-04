@@ -1,0 +1,792 @@
+/* REXX */
+trace o
+hmscore = 0
+awscore = 0
+inning = 1
+cpu = ''
+say 'Choose two teams with space in between your team names:'
+parse upper pull team1 team2 .
+say 'Do you want to face the computer? (y/n)'
+pull answer
+if answer = y then do
+say 'Which team do you want to be the computer?'
+pull answer1
+   if answer1 = team1 then do
+   cpu = team1
+   end
+   if answer1 = team2 then do
+   cpu = team2
+   end
+end
+say 'who is the home team?'
+pull hometeam
+Select
+   When hometeam = team1 then do
+   home = team1
+   away = team2
+   end
+   When hometeam = team2 then do
+   home = team2
+   away = team1
+   end
+   OTHERWISE DO
+   say 'No team selected, so home team will be chosen by the system.'
+   hometeam = random(1,2)
+      if hometeam = 1 then do
+      home = team1
+      away = team2
+      end
+      if hometeam = 2 then do
+      home = team2
+      away = team1
+      end
+   end
+end
+say 'what time is this game?'
+pull gametime
+say 'what is the name of your league?'
+pull lgname
+say 'who is the sponsor for this game?'
+pull sponsor
+say 'What is the slogan for your sponsor?'
+pull sponslogan
+say 'Welcome to 'lgname
+say 'Today we have a matchup of 'away 'vs' home 'at 'gametime
+say 'sponsored by 'sponsor sponslogan
+say 'PLAY BALL!'
+say ''
+say ''
+   do until inning > 6 & hmscore \= awscore
+   say 'Top 'inning
+   say away awscore home hmscore
+   say ''
+   call HFAWAY
+   if  inning >= 6 & hmscore > awscore then signal ENDGAME
+   Say 'Mid 'inning
+   say ''
+   say away awscore home hmscore
+   say ''
+   say 'Bottom 'inning
+   say ''
+   call HFHOME
+   Say 'End 'inning
+   say ''
+   say away awscore home hmscore
+   say ''
+   inning = inning + 1
+   END
+say away awscore home hmscore 'Final'
+say ''
+ENDGAME:
+Select
+  When awscore > hmscore then do
+  say away 'win! Final score: 'away awscore home hmscore
+  end
+  When hmscore > awscore then do
+  say home 'win! Final score: 'away awscore home hmscore
+  end
+  Otherwise do
+  say hmscore 'and' awscore 'tied. Final: 'away awscore home hmscore
+  end
+end
+DONE:
+EXIT
+HFAWAY:
+O = 3
+OUTS = 0
+OB = 0
+S = 0
+B = 0
+Do while O > 0
+res = 0
+say ''
+say away awscore home hmscore
+say ''
+say 'OUTS=' OUTS 'B=' B 'S=' S 'Onbase=' OB
+say ''
+say 'PITCHER: Select your pitch.'
+say 'FB = 1 CB = 2 SL = 3 CH = 4'
+say 'Then append your location - ex. 1U:'
+say 'Right = R Left = L Down = D Up = U'
+say ''
+if cpu = home then do
+CPUptch = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+Parse var CPUptch U1 U2 U3 U4 D1 D2 D3 D4 R1 R2 R3 R4 L1 L2 L3 L4
+CPUP = Random(1,16)
+say cpu 'has the pitch selected'
+   Select
+      When CPUP = U1 Then Pitch = '1U'
+      When CPUP = U2 Then Pitch = '2U'
+      When CPUP = U3 Then Pitch = '3U'
+      When CPUP = U4 Then Pitch = '4U'
+      When CPUP = D1 Then Pitch = '1D'
+      When CPUP = D2 Then Pitch = '2D'
+      When CPUP = D3 Then Pitch = '3D'
+      When CPUP = D4 Then Pitch = '4D'
+      When CPUP = R1 Then Pitch = '1R'
+      When CPUP = R2 Then Pitch = '2R'
+      When CPUP = R3 Then Pitch = '3R'
+      When CPUP = R4 Then Pitch = '4R'
+      When CPUP = L1 Then Pitch = '1L'
+      When CPUP = L2 Then Pitch = '2L'
+      When CPUP = L3 Then Pitch = '3L'
+      When CPUP = L4 Then Pitch = '4L'
+      Otherwise nop
+   end
+end
+if cpu = away then do
+pull Pitch
+end
+If cpu = '' then do
+pull Pitch
+end
+If POS('1',Pitch) > 0 Then do
+Ptype = 'Fastball'
+Clock = Random(90,100)
+end
+If POS('2',Pitch) > 0 Then do
+Ptype = 'Curveball'
+Clock = Random(70,79)
+end
+If POS('3',Pitch) > 0 Then do
+Ptype = 'Slider'
+Clock = Random(80,90)
+end
+If POS('4',Pitch) > 0 Then do
+Ptype = 'Changeup'
+Clock = Random(75,85)
+end
+If POS('U',Pitch) > 0 Then do
+Loc = 'Up'
+end
+If POS('D',Pitch) > 0 Then do
+Loc = 'Down'
+end
+If POS('R',Pitch) > 0 Then do
+Loc = 'Right'
+end
+If POS('L',Pitch) > 0 Then do
+Loc = 'Left'
+end
+Hint = '1 2 3 4 5 6'
+Parse var Hint one two three speed pitchtype location
+Rhint = Random(1,6)
+if Rhint = speed then do
+say clock'MPH'
+end
+if Rhint = pitchtype then do
+say Ptype
+end
+if Rhint = location then do
+say Loc
+end
+BKvalue = '1 2 3'
+Parse var BKvalue Bl K K1
+Ballk = Random(1,3)
+if Ballk = Bl then do
+Ballslc = '1 2'
+Parse var Ballslc ba1 Ballmiss
+Ballnum = Random(1,2)
+   If Ballnum = Ballmiss then do
+      if Loc = 'Down' then do
+      Say 'Ball in the dirt.'
+      end
+      if Loc = 'Up' then do
+      say 'Ball up too high.'
+      end
+      if Loc = 'Right' then do
+      say 'Ball way off the plate.'
+      end
+      if Loc = 'Left' then do
+      say 'Ball way off the plate.'
+      end
+   end
+end
+If Pitch = 'LEAVE' then signal DONE
+say ''
+say 'BATTER: Select your guess pitch.'
+say 'FB = 1 CB = 2 SL = 3 CH = 4'
+say 'Then append your swing location - ex. 1U:'
+say 'Right = R Left = L Down = D Up = U'
+say ''
+if cpu = away then do
+CPUSwng = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+Parse var CPUSwng U1 U2 U3 U4 D1 D2 D3 D4 R1 R2 R3 R4 L1 L2 L3 L4
+CPUS = Random(1,16)
+Noswing = 0
+CPUNS = Random(0,1)
+if CPUNS = Noswing then do
+Say cpu 'takes pitch.'
+Swing = ''
+CPUS = 0
+END
+if Ballk = Bl & Ballnum = Ballmiss then do
+CPUS = 0
+END
+   Select
+      When CPUS = U1 Then Swing = '1U'
+      When CPUS = U2 Then Swing = '2U'
+      When CPUS = U3 Then Swing = '3U'
+      When CPUS = U4 Then Swing = '4U'
+      When CPUS = D1 Then Swing = '1D'
+      When CPUS = D2 Then Swing = '2D'
+      When CPUS = D3 Then Swing = '3D'
+      When CPUS = D4 Then Swing = '4D'
+      When CPUS = R1 Then Swing = '1R'
+      When CPUS = R2 Then Swing = '2R'
+      When CPUS = R3 Then Swing = '3R'
+      When CPUS = R4 Then Swing = '4R'
+      When CPUS = L1 Then Swing = '1L'
+      When CPUS = L2 Then Swing = '2L'
+      When CPUS = L3 Then Swing = '3L'
+      When CPUS = L4 Then Swing = '4L'
+      Otherwise nop
+   end
+end
+if Rhint = speed then do
+Swing1 = Substr(Pitch,1,1)
+Swing2 = Substr(Swing,2)
+Swing = Swing1||Swing2
+end
+if Rhint = pitchtype then do
+Swing1 = Substr(Pitch,1,1)
+Swing2 = Substr(Swing,2)
+Swing = Swing1||Swing2
+end
+if Rhint = location then do
+Swing1 = Substr(Swing,1,1)
+Swing2 = Substr(Pitch,2)
+Swing = Swing1||Swing2
+end
+if CPUS = 0 Then do
+Swing = ''
+end
+if cpu = home then do
+pull Swing
+end
+If cpu = '' then do
+pull Swing
+end
+say ''
+say PType Loc Clock'MPH' 'Pitch =' Pitch 'Swing =' Swing
+say ''
+If Swing = 'LEAVE' then signal DONE
+Actnum = '1 2 3 4 5 6 7 8 9 10'
+Parse var Actnum HR B3 B2 B1 Foul GO FLO SWS SWS2 SWS3
+Match = '1U 2U 3U 4U 1D 2D 3D 4D 1R 2R 3R 4R 1L 2L 3L 4L'
+ODD1 = Random(1,7)
+ODD2 = Random(3,9)
+ODD3 = Random(4,10)
+IF Ballk = Bl then do
+ODD1 = Random(3,9)
+ODD2 = Random(4,10)
+ODD3 = Random(5,10)
+end
+   Select
+      When Pitch = Swing Then do
+      Res = ODD1
+      end
+      When Substr(Pitch,1,1) = Substr(Swing,1,1) Then do
+      Res = ODD2
+      end
+      When Substr(Pitch,2) = Substr(Swing,2) Then do
+      Res = ODD2
+      end
+      When POS(Swing,Match) > 0 Then do
+        if Pitch \= Swing then do
+        Res = ODD3
+        end
+      end
+      When POS(Swing,Match) = 0 then do
+         If Ballk = Bl then do
+         B = B + 1
+         Say 'ball' Loc
+         END
+            If B = 4 then do
+            Say 'Ball 4, Take your base.'
+            OB = OB + 1
+            B = 0
+            S = 0
+            END
+               IF OB = 4 then do
+               OB = OB - 1
+               awscore = awscore + 1
+               say 'Bases loaded walk!'
+               say '1 run scored!'
+               END
+         If Ballk = K Then do
+         S = S + 1
+            If S < 3 then do
+            Say 'Called Strike!'
+            End
+            If S = 3 Then do
+            say 'Strike 3 called, you''re out!'
+            O = O - 1
+            OUTS = OUTS + 1
+            S = 0
+            B = 0
+            END
+         END
+         If Ballk = K1 Then do
+         S = S + 1
+            If S < 3 then do
+            Say 'Called Strike!'
+            End
+            If S = 3 Then do
+            say 'Strike 3 called, you''re out!'
+            O = O - 1
+            OUTS = OUTS + 1
+            S = 0
+            B = 0
+            END
+         END
+      END
+      Otherwise nop
+   END
+If res = HR Then call HOMERUNA
+If res = B3 Then call TRIPLEA
+If res = B2 Then call DOUBLEA
+If res = B1 Then call SINGLEA
+If res = Foul Then call FOULBALLA
+If res = GO Then call GROUNDOUTA
+If res = FLO Then call FLYOUTA
+If res = SWS Then call SWINGKA
+If res = SWS2 Then call SWINGKA
+If res = SWS3 Then call SWINGKA
+END
+return
+HOMERUNA:
+If OB = 3 then say '***GRAND SLAM***'
+If OB = 2 then say '***3 Run HR***'
+If OB = 1 then say '***2 Run HR***'
+If OB = 0 then say '***Solo HR***'
+OB = OB + 1
+Say OB 'Run(s) have scored'
+awscore = awscore + OB
+OB = OB - OB
+B = 0
+S = 0
+Return
+TRIPLEA:
+Say '***TRIPLE***'
+Say OB 'Run(s) have scored'
+awscore  = awscore + OB
+OB = OB - OB
+OB = OB + 1
+Say away awscore home hmscore
+B = 0
+S = 0
+return
+DOUBLEA:
+Say '***DOUBLE***'
+Say OB 'Run(s) have scored'
+awscore = awscore + OB
+OB = OB - OB
+OB = OB + 1
+Say away awscore home hmscore
+B = 0
+S = 0
+return
+SINGLEA:
+Say '***SINGLE***'
+If OB = 2 then do
+Say '1 Run(s) have scored'
+OB = OB - 1
+awscore = awscore + 1
+Say away awscore home hmscore
+END
+If OB = 3 then do
+Say '2 Run(s) have scored'
+OB = OB - 2
+awscore  = awscore + 2
+Say away awscore home hmscore
+END
+OB = OB +1
+B = 0
+S = 0
+return
+FOULBALLA:
+Say 'Foul Ball'
+S = S + 1
+If S = 3 then do
+S = S - 1
+END
+return
+GROUNDOUTA:
+O = O - 1
+OUTS = OUTS + 1
+Say 'Groundout.' OUTS 'out(s).'
+S = 0
+B = 0
+Return
+FLYOUTA:
+O = O - 1
+OUTS = OUTS + 1
+Say 'Flyout.' OUTS 'out(s).'
+S = 0
+B = 0
+Return
+SWINGKA:
+S = S + 1
+If S < 3 then do
+Say 'Swing and a Miss!'
+End
+   If S = 3 Then do
+   say 'Swing and a miss! Strike 3!'
+   O = O - 1
+   OUTS = OUTS + 1
+   S = 0
+   B = 0
+   END
+return
+HFHOME:
+O = 3
+OUTS = 0
+OB = 0
+S = 0
+B = 0
+Do while O > 0
+res = 0
+say ''
+say away awscore home hmscore
+say ''
+say 'OUTS=' OUTS 'B=' B 'S=' S 'Onbase=' OB
+say ''
+say 'PITCHER: Select your pitch.'
+say 'FB = 1 CB = 2 SL = 3 CH = 4'
+say 'Then append your location - ex. 1U:'
+say 'Right = R Left = L Down = D Up = U'
+say ''
+if cpu = away then do
+CPUptch = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+Parse var CPUptch U1 U2 U3 U4 D1 D2 D3 D4 R1 R2 R3 R4 L1 L2 L3 L4
+CPUP = Random(1,16)
+say cpu 'has the pitch selected'
+   Select
+      When CPUP = U1 Then Pitch = '1U'
+      When CPUP = U2 Then Pitch = '2U'
+      When CPUP = U3 Then Pitch = '3U'
+      When CPUP = U4 Then Pitch = '4U'
+      When CPUP = D1 Then Pitch = '1D'
+      When CPUP = D2 Then Pitch = '2D'
+      When CPUP = D3 Then Pitch = '3D'
+      When CPUP = D4 Then Pitch = '4D'
+      When CPUP = R1 Then Pitch = '1R'
+      When CPUP = R2 Then Pitch = '2R'
+      When CPUP = R3 Then Pitch = '3R'
+      When CPUP = R4 Then Pitch = '4R'
+      When CPUP = L1 Then Pitch = '1L'
+      When CPUP = L2 Then Pitch = '2L'
+      When CPUP = L3 Then Pitch = '3L'
+      When CPUP = L4 Then Pitch = '4L'
+      Otherwise nop
+   end
+end
+if cpu = home then do
+pull Pitch
+end
+If cpu = '' then do
+pull Pitch
+end
+If POS('1',Pitch) > 0 Then do
+Ptype = 'Fastball'
+Clock = Random(90,100)
+end
+If POS('2',Pitch) > 0 Then do
+Ptype = 'Curveball'
+Clock = Random(70,79)
+end
+If POS('3',Pitch) > 0 Then do
+Ptype = 'Slider'
+Clock = Random(80,90)
+end
+If POS('4',Pitch) > 0 Then do
+Ptype = 'Changeup'
+Clock = Random(75,85)
+end
+If POS('U',Pitch) > 0 Then do
+Loc = 'Up'
+end
+If POS('D',Pitch) > 0 Then do
+Loc = 'Down'
+end
+If POS('R',Pitch) > 0 Then do
+Loc = 'Right'
+end
+If POS('L',Pitch) > 0 Then do
+Loc = 'Left'
+end
+Hint = '1 2 3 4 5 6'
+Parse var Hint one two three speed pitchtype location
+Rhint = Random(1,6)
+if Rhint = speed then do
+say clock'MPH'
+end
+if Rhint = pitchtype then do
+say Ptype
+end
+if Rhint = location then do
+say Loc
+end
+BKvalue = '1 2 3'
+Parse var BKvalue Bl K K1
+Ballk = Random(1,3)
+if Ballk = Bl then do
+Ballslc = '1 2'
+Parse var Ballslc ba1 Ballmiss
+Ballnum = Random(1,2)
+   If Ballnum = Ballmiss then do
+      if Loc = 'Down' then do
+      Say 'Ball in the dirt.'
+      end
+      if Loc = 'Up' then do
+      say 'Ball up too high.'
+      end
+      if Loc = 'Right' then do
+      say 'Ball way off the plate.'
+      end
+      if Loc = 'Left' then do
+      say 'Ball way off the plate.'
+      end
+   end
+end
+If Pitch = 'LEAVE' then signal DONE
+say ''
+say 'BATTER: Select your guess pitch.'
+say 'FB = 1 CB = 2 SL = 3 CH = 4'
+say 'Then append your swing location - ex. 1U:'
+say 'Right = R Left = L Down = D Up = U'
+say ''
+if cpu = home then do
+CPUSwng = '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+Parse var CPUswng U1 U2 U3 U4 D1 D2 D3 D4 R1 R2 R3 R4 L1 L2 L3 L4
+CPUS = Random(1,16)
+Noswing = 0
+CPUNS = Random(0,1)
+if CPUNS = Noswing then do
+Say cpu 'takes pitch.'
+Swing = ''
+CPUS = 0
+END
+if Ballk = Bl & Ballnum = Ballmiss then do
+CPUS = 0
+END
+   Select
+      When CPUS = U1 Then Swing = '1U'
+      When CPUS = U2 Then Swing = '2U'
+      When CPUS = U3 Then Swing = '3U'
+      When CPUS = U4 Then Swing = '4U'
+      When CPUS = D1 Then Swing = '1D'
+      When CPUS = D2 Then Swing = '2D'
+      When CPUS = D3 Then Swing = '3D'
+      When CPUS = D4 Then Swing = '4D'
+      When CPUS = R1 Then Swing = '1R'
+      When CPUS = R2 Then Swing = '2R'
+      When CPUS = R3 Then Swing = '3R'
+      When CPUS = R4 Then Swing = '4R'
+      When CPUS = L1 Then Swing = '1L'
+      When CPUS = L2 Then Swing = '2L'
+      When CPUS = L3 Then Swing = '3L'
+      When CPUS = L4 Then Swing = '4L'
+      Otherwise nop
+   end
+end
+if Rhint = speed then do
+Swing1 = Substr(Pitch,1,1)
+Swing2 = Substr(Swing,2)
+Swing = Swing1||Swing2
+end
+if Rhint = pitchtype then do
+Swing1 = Substr(Pitch,1,1)
+Swing2 = Substr(Swing,2)
+Swing = Swing1||Swing2
+end
+if Rhint = location then do
+Swing1 = Substr(Swing,1,1)
+Swing2 = Substr(Pitch,2)
+Swing = Swing1||Swing2
+end
+if CPUS = 0 Then do
+Swing = ''
+end
+if cpu = away then do
+pull Swing
+end
+If cpu = '' then do
+pull Swing
+end
+say ''
+say PType Loc Clock'MPH' 'Pitch =' Pitch 'Swing =' Swing
+say ''
+If Swing = 'LEAVE' then signal DONE
+Actnum = '1 2 3 4 5 6 7 8 9 10'
+Parse var Actnum HR B3 B2 B1 Foul GO FLO SWS SWS2 SWS3
+Match = '1U 2U 3U 4U 1D 2D 3D 4D 1R 2R 3R 4R 1L 2L 3L 4L'
+ODD1 = Random(1,7)
+ODD2 = Random(3,9)
+ODD3 = Random(4,10)
+IF Ballk = Bl then do
+ODD1 = Random(3,9)
+ODD2 = Random(4,10)
+ODD3 = Random(5,10)
+end
+   Select
+      When Pitch = Swing Then do
+      Res = ODD1
+      end
+      When Substr(Pitch,1,1) = Substr(Swing,1,1) Then do
+      Res = ODD2
+      end
+      When Substr(Pitch,2) = Substr(Swing,2) Then do
+      Res = ODD3
+      end
+      When POS(Swing,Match) > 0 Then do
+        if Pitch \= Swing then do
+        Res = ODD3
+        end
+      end
+      When POS(Swing,Match) = 0 then do
+         If Ballk = Bl then do
+         B = B + 1
+         Say 'ball' Loc
+         END
+            If B = 4 then do
+            Say 'Ball 4, Take your base.'
+            OB = OB + 1
+            B = 0
+            S = 0
+            END
+               IF OB = 4 then do
+               OB = OB - 1
+               hmscore = hmscore + 1
+               say 'Bases loaded walk!'
+               say '1 run scored!'
+               END
+         If Ballk = K Then do
+         S = S + 1
+            If S < 3 then do
+            Say 'Called Strike!'
+            End
+            If S = 3 Then do
+            say 'Strike 3 called, you''re out!'
+            O = O - 1
+            OUTS = OUTS + 1
+            S = 0
+            B = 0
+            END
+         END
+         If Ballk = K1 Then do
+         S = S + 1
+            If S < 3 then do
+            Say 'Called Strike!'
+            End
+            If S = 3 Then do
+            say 'Strike 3 called, you''re out!'
+            O = O - 1
+            OUTS = OUTS + 1
+            S = 0
+            B = 0
+            END
+         END
+      END
+      Otherwise nop
+   END
+If res = HR Then call HOMERUNH
+If res = B3 Then call TRIPLEH
+If res = B2 Then call DOUBLEH
+If res = B1 Then call SINGLEH
+If res = Foul Then call FOULBALLH
+If res = GO Then call GROUNDOUTH
+If res = FLO Then call FLYOUTH
+If res = SWS Then call SWINGKH
+If res = SWS1 then call SWINGKH
+If res = SWS2 then call SWINGKH
+if  inning >= 6 & hmscore > awscore then do
+O = 0
+end
+END
+return
+HOMERUNH:
+If OB = 3 then say '***GRAND SLAM***'
+If OB = 2 then say '***3 Run HR***'
+If OB = 1 then say '***2 Run HR***'
+If OB = 0 then say '***Solo HR***'
+OB = OB + 1
+Say OB 'Run(s) have scored'
+hmscore = hmscore + OB
+OB = OB - OB
+B = 0
+S = 0
+Return
+TRIPLEH:
+Say '***TRIPLE***'
+Say OB 'Run(s) have scored'
+hmscore  = hmscore + OB
+OB = OB - OB
+OB = OB + 1
+Say away awscore home hmscore
+B = 0
+S = 0
+return
+DOUBLEH:
+Say '***DOUBLE***'
+Say OB 'Run(s) have scored'
+hmscore = hmscore + OB
+OB = OB - OB
+OB = OB + 1
+Say away awscore home hmscore
+B = 0
+S = 0
+return
+SINGLEH:
+Say '***SINGLE***'
+If OB = 2 then do
+Say '1 Run(s) have scored'
+OB = OB - 1
+hmscore = hmscore + 1
+Say away awscore home hmscore
+END
+If OB = 3 then do
+Say '2 Run(s) have scored'
+OB = OB - 2
+hmscore  = hmscore + 2
+Say away awscore home hmscore
+END
+OB = OB +1
+B = 0
+S = 0
+return
+FOULBALLH:
+Say 'Foul Ball'
+S = S + 1
+If S = 3 then do
+S = S - 1
+END
+return
+GROUNDOUTH:
+O = O - 1
+OUTS = OUTS + 1
+Say 'Groundout.' OUTS 'out(s).'
+S = 0
+B = 0
+Return
+FLYOUTH:
+O = O - 1
+OUTS = OUTS + 1
+Say 'Flyout.' OUTS 'out(s).'
+S = 0
+B = 0
+Return
+SWINGKH:
+S = S + 1
+If S < 3 then do
+Say 'Swing and a Miss!'
+End
+   If S = 3 Then do
+   say 'Swing and a miss! Strike 3!'
+   O = O - 1
+   OUTS = OUTS + 1
+   S = 0
+   B = 0
+   END
+return
