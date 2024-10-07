@@ -317,11 +317,14 @@ end
          If OB = 1 & Bn1 = 'O' then do
          Bn2 = 'O'
          end
+         If OB = 2 & Bn3 = 'O' then do
+         Bn2 = 'O'
+         end
          If OB = 2 & Bn2 = 'O' then do
          Bn3 = 'O'
          end
-         If OB = 2 & Bn3 = 'O' then do
-         Bn2 = 'O'
+         If OB = 0 then do
+         Bn1 = 'O'
          end
             OB = OB + 1
             END
