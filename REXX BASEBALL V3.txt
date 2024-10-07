@@ -314,9 +314,16 @@ end
          END
             If B = 4 then do
             Say 'Ball 4, Take your base.'
+         If OB = 1 & Bn1 = 'O' then do
+         Bn2 = 'O'
+         end
+         If OB = 2 & Bn2 = 'O' then do
+         Bn3 = 'O'
+         end
+         If OB = 2 & Bn3 = 'O' then do
+         Bn2 = 'O'
+         end
             OB = OB + 1
-            B = 0
-            S = 0
             END
                IF OB = 4 then do
                OB = OB - 1
