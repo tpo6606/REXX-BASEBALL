@@ -359,7 +359,7 @@ If res = B2 Then call DOUBLEA
 If res = B1 Then call SINGLEA
 If res = Foul Then call FOULBALLA
 If res = GO & Bn3 = 'X' then call GROUNDOUT1A
-If res = GO Then call GROUNDOUTA
+If res = GO & Bn3 = 'O' Then call GROUNDOUTA
 If res = FLO Then call FLYOUTA
 If res = SWS Then call SWINGKA
 If res = SWS2 Then call SWINGKA
@@ -500,6 +500,7 @@ GROUNDOUT1A:
 O = O - 1
 OUTS = OUTS + 1
 Say 'Groundout.' OUTS 'out(s).'
+if O = 0 then return
 GBC = Random(1,3)
 GBC1 = Random(1,2)
 if OB = 2 then do
@@ -538,6 +539,7 @@ GROUNDOUTA:
 O = O - 1
 OUTS = OUTS + 1
 Say 'Groundout.' OUTS 'out(s).'
+if O = 0 then return
 GBC = Random(1,4)
 GBC1 = Random(1,3)
 if OB = 2 & Bn3 = 'O' then do
