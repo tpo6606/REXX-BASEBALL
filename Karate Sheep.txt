@@ -1,0 +1,104 @@
+/* REXX */
+trace o
+sheep = 10
+count = 15
+sh = 0
+do until sheep = 0
+sheep = 10
+say 'Dee Derr!'
+say 'do dalada do do dalada.'
+say 'hehehe huhhuh!'
+say 'hiii yahh!'
+say 'oooohh ooooooo, aaahhh!'
+say 'wolf cries 100 ft in air... crash!'
+if count < 10 then say 'The wolf is getting tired'
+if count < 6 then say 'The wolf is very tired'
+if count < 3 then say 'The wolf is about to give up'
+if count = 0 then call WIN
+say 'Are the sheep going to be safe now? (y/n)'
+parse upper pull safe
+if safe = 'Y' then do
+say 'Alright then Wanda is packing up for vaction.'
+Say 'you are now Trico'
+Call TRICO
+end
+if safe = 'N' then do
+say 'Baaa'
+Say 'you are now Wanda.'
+say 'Can you stop wolf until he gives up?'
+Call WANDA
+end
+if safe = 'leave' then leave
+count = count - 1
+END
+say 'The Wolf ate all the sheep.'
+exit
+WIN:
+say 'hiii yahh!'
+say 'oooohh ooooooo, crash!'
+say 'wolf cries 100 ft in air... crash!'
+say 'Well done Wanda, you didnt let the Wolf eat the Sheep!'
+say 'The Wolf has exhausted all his sneaky ideas. You win!'
+Exit
+TRICO:
+do until sheep = 0
+say 'sheep remaining:' sheep
+sh = random(0,3)
+say 'pick a number 1-5'
+pull number
+pick = random(1,5)
+say '  ^        ^'
+say ' /^\      /^\'
+say '|   ------   |'
+say '|  _      _  |  HEHE'
+say '| |_|    |_| |    HUHUH'
+say '| |O|    |O| |'
+say '| |_|    |_| |'
+say '|            |'
+say '|   ______   |'
+say '|  |      |  |'
+say '|  |      |  |'
+say '|  |      |  |'
+say '|  |______|  |'
+say '|            |'
+say '|____________|'
+say '|\  v    v  /|'
+say '| \        / |'
+say '|  \______/  |'
+say ' ------------ '
+if number = pick then return
+call wolf2 sh
+sheep = sheep - sh
+end
+return
+WANDA:
+do until sheep = 0
+say 'sheep remaining:' sheep
+sh = random(0,3)
+say 'pick a number 1-5'
+pull number
+pick = random(1,5)
+say '  ^        ^'
+say ' /^\      /^\'
+say '|   ------   |'
+say '|  _      _  |  HEHE'
+say '| |_|    |_| |    HUHUH'
+say '| |O|    |O| |'
+say '| |_|    |_| |'
+say '|            |'
+say '|   ______   |'
+say '|  |      |  |'
+say '|  |      |  |'
+say '|  |      |  |'
+say '|  |______|  |'
+say '|            |'
+say '|____________|'
+say '|\  v    v  /|'
+say '| \        / |'
+say '|  \______/  |'
+say ' ------------ '
+if number = pick then return
+call wolf2 sh
+sheep = sheep - sh
+end
+return
