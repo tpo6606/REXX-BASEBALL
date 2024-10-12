@@ -1,0 +1,20 @@
+BASE1 - Has the basics needed to display a ISPF Panel.
+Make note of the two ISPEXEC commands
+LIBDEF is only needed once at the top to tell where the Panels are located.
+DISPLAY does just that, Displays the Panel.  It would be in your loop.  With PF3 or you could a value to EXIT as well.
+You would need to set the DIAM1-7 variables (or add more) each time the base runners move.
+
+PANBASE1 - Is just the start of a Panel for the game.
+I framed the DIAM display because it did not retain leading spaces for some reason.
+Update the Options section
+Add lines for Outs, Count, etc....
+Use the )ATTR values to play with colors.
+
+PANSYS1 - This is a more involved Panel with lots of things you can do.
+This does not have the driving program, however.  Just syntax of things.
+
+We can have a working session to help with questions. 
+
+Note: Sometimes when making Panel changes, you need to exit ISPF (back to READY prompt), for the changes to be picked up.  Not always though.  I could never figure out when.
+ISPF from READY gets you back in.
+
