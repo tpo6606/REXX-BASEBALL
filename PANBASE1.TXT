@@ -1,0 +1,34 @@
+)ATTR
+% TYPE(TEXT) INTENS(LOW) COLOR(BLUE)
++ TYPE(TEXT) INTENS(LOW) COLOR(GREEN) SKIP(ON)
+! TYPE(TEXT) INTENS(HIGH) COLOR(WHITE)
+^ TYPE(INPUT) INTENS(LOW) COLOR(RED) CAPS(ON)
+_ TYPE(INPUT) INTENS(LOW) COLOR(RED) CAPS(ON) PAD(_)
+$ TYPE(OUTPUT) INTENS(LOW) COLOR(BLUE) CAPS(OFF)
+# TYPE(OUTPUT) INTENS(LOW) COLOR(GREEN) CAPS(OFF)
+@ TYPE(OUTPUT) INTENS(HIGH) COLOR(WHITE) CAPS(OFF)
+)BODY
+%--------------------- BASBALL GAME --------------------------------------
++
++              $DIAM1
++              $DIAM2
++              $DIAM3
++              $DIAM4
++              $DIAM5
++              $DIAM6
++              $DIAM7
++
+% PITCHER                      BATTER
++ PITCH OPTION . .^PITOPT     +SWING OPTION . .^BATOPT
++ 1=HIGH                      +1=LOW
++
+)INIT
+ .CURSOR = PITOPT
+)PROC
+  IF (.RESP = END)
+    &EXIT1 = .RESP
+
+  VER(&PITOPT,LIST,1,2,3,4)
+  VER(&BATOPT,LIST,1,2,3,4)
+
+)END

@@ -1,0 +1,30 @@
+/* REXX EXEC TO DO SOMETHING                         */
+
+RCODE = 0
+USER1 = SYSVAR("SYSUID")
+
+"ISPEXEC LIBDEF ISPPLIB DATASET ID('NEWBIND.ISPPLIB')"
+
+/*-----------------*/
+/*  DISPLAY PANEL  */
+/*-----------------*/
+DISP1: NOP
+
+/* LOAD DIAMOND VARIABLES */
+DIAM1='|      X       |'
+DIAM2='|    /    \    |'
+DIAM3='|   /      \   |'
+DIAM4='|  X        O  |'
+DIAM5='|   \      /   |'
+DIAM6='|    \    /    |'
+DIAM7='|      X       |'
+
+"ISPEXEC DISPLAY PANEL(PANBASE1)"
+
+IF EXIT1 = 'END' THEN SIGNAL EXIT99
+
+
+SIGNAL DISP1
+
+EXIT99:NOP
+EXIT
